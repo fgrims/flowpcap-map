@@ -1,0 +1,29 @@
+# Raw / derived dataset files (large, pulled or regenerated locally)
+datasets/**/pcaps/*
+datasets/**/flows/*
+datasets/**/mapping_flow_packet/**/*.db
+*.pcap
+*.pcapng
+*.db
+*.sqlite
+*.sqlite3
+*.csv
+*.parquet
+*.zip
+*.gz
+
+# keep folder structure in git
+!**/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
