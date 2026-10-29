@@ -1,0 +1,44 @@
+{
+  "dataset_name": "cic2017",
+  "index_dir": "/path/to/network_datasets/datasets/cic2017/mapping_flow_packet",
+
+  "timestamp_format": "%Y-%m-%d %H:%M:%S.%f",
+  "timestamp_tz_offset_h": 0,
+  "timestamp_tolerance_s": 0,
+
+  "max_workers": 4,
+
+  "column_mapping": {
+    "src_ip":        "Src IP",
+    "src_port":      "Src Port",
+    "dst_ip":        "Dst IP",
+    "dst_port":      "Dst Port",
+    "protocol":      "Protocol",
+    "timestamp":     "Timestamp",
+    "flow_duration": "Flow Duration",
+    "label":         "Label"
+  },
+
+  "pairs": [
+    {
+      "csv":   "/path/to/network_datasets/datasets/cic2017/flows/monday.csv",
+      "pcaps": ["/path/to/network_datasets/datasets/cic2017/pcaps/Monday-WorkingHours.pcap"]
+    },
+    {
+      "csv":   "/path/to/network_datasets/datasets/cic2017/flows/tuesday.csv",
+      "pcaps": ["/path/to/network_datasets/datasets/cic2017/pcaps/Tuesday-WorkingHours.pcap"]
+    },
+    {
+      "csv":   "/path/to/network_datasets/datasets/cic2017/flows/wednesday.csv",
+      "pcaps": ["/path/to/network_datasets/datasets/cic2017/pcaps/Wednesday-WorkingHours.pcap"]
+    },
+    {
+      "csv":   "/path/to/network_datasets/datasets/cic2017/flows/thursday.csv",
+      "pcaps": ["/path/to/network_datasets/datasets/cic2017/pcaps/Thursday-WorkingHours.pcap"]
+    },
+    {
+      "csv":   "/path/to/network_datasets/datasets/cic2017/flows/friday.csv",
+      "pcaps": ["/path/to/network_datasets/datasets/cic2017/pcaps/Friday-WorkingHours.pcap"]
+    }
+  ]
+}
