@@ -83,7 +83,8 @@ network_datasets/
     ├── requirements.txt
     ├── config.example.json        ← template for the indexer config
     ├── flow_indexer.py            ← builds the index
-    └── query_flows.py             ← query functions on top of the index
+    ├── query_flows.py             ← query functions on top of the index
+    └── packet_to_label.py         ← example: packet → flow label, step by step
 ```
 
 PCAPs, CSVs and `scripts/config.json` are git-ignored. Only the folder structure is versioned.
@@ -376,6 +377,36 @@ Fields accepted by `get_packet_labels_by_fields` (and by `find_packets`):
 Each result contains `packet_number`, `offset`, `timestamp`, the decoded header fields and `labels`, a list of flow matches.
 
 Without `timestamp`, a 5-tuple usually matches many packets (often the whole flow). When `timestamp` is given, non-matching packets are discarded from their record header alone, without decoding them, so the scan is much faster.
+
+### Walkthrough: `packet_to_label.py`
+
+`scripts/packet_to_label.py` is a small, commented script that shows how the packet → label lookup works in practice. It takes one packet of a PCAP and finds the label of its flow with each of the four methods above, so you can compare them on the same packet.
+
+Set the values at the top of the script:
+
+```python
+PATH_TO_DBS = ROOT / "datasets/cic2017/mapping_flow_packet"       # folder with one sub-folder per day
+DB = PATH_TO_DBS / "monday/monday_index.db"                       # database of the day
+PCAP = ROOT / "datasets/cic2017/pcaps/Monday-WorkingHours_2.pcap" # a PCAP indexed in DB
+PACKET_NUMBER = 1                                                 # Wireshark "No." of the packet
+```
+
+Then run it from the project root:
+
+```bash
+python scripts/packet_to_label.py
+```
+
+What it does:
+
+1. Reads the chosen packet and prints its number, byte offset, timestamp and 5-tuple. The packet must be IPv4; otherwise the script asks you to pick another `PACKET_NUMBER`.
+2. Looks up the label of its flow in four ways:
+   1. **by offset** with `get_packet_labels` (one query on the database);
+   2. **by packet number** with `get_packet_labels_by_number` (reads the PCAP up to that packet);
+   3. **by header fields** with `get_packet_labels_by_fields`, using the packet's IPs, ports, protocol and timestamp (`limit=1` stops at the first match);
+   4. **by offset, without naming the database** with `find_packet_labels`, which finds which `.db` in `PATH_TO_DBS` indexes this PCAP.
+
+For each method it prints one line per matching flow (`flow_id`, `label`, `ambiguous`), or a message if the packet does not belong to any flow of the CSV. All four methods should give the same result.
 
 ### Lower-level helpers
 
